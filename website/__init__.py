@@ -12,9 +12,8 @@ db_path = os.path.realpath("website/database")
 def create_app():
 
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "qweqdasdsa asdasdsadsa"
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
-    # postgresql://shopping_ecfi_user:Wx5NgPSdvvHtXGi0jocgXSwLqj2e7sE6@dpg-ckkstqou1l6c73buajo0-a.oregon-postgres.render.com/shopping_ecfi
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     app.config['CORS_HEADERS'] = 'Content-Type'
