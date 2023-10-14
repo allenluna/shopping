@@ -1,0 +1,135 @@
+{% extends "base.html" %}{% block title %} Checkout {% endblock %} {% block body
+%}
+<section style="background-color: #eee">
+  <div class="container py-5">
+    <div class="card">
+      <div class="card-body">
+        <div class="row d-flex justify-content-center pb-5">
+          <div class="col-md-7 col-xl-5 mb-4 mb-md-0">
+            <div class="py-4 text-center">
+              <img
+                src="../static/img/{{buy_product.image_url.title[image_pos][image_filename]}}"
+                class="w-100 p-5"
+                alt=""
+              />
+            </div>
+
+            <hr />
+            <div class="pt-2">
+              <div class="d-flex pb-2">
+                <div>
+                  <p>
+                    <b
+                      >Your Order
+                      <span class="text-success"
+                        >₱{{ buy_product.price }}</span
+                      ></b
+                    >
+                  </p>
+                </div>
+                <div class="ms-auto">
+                  <p class="text-primary">
+                    <i class="fas fa-plus-circle text-primary pe-1"></i>Add
+                    payment card
+                  </p>
+                </div>
+              </div>
+              <p>This is an estimate for the portion of your order today.</p>
+              <form class="pb-3" method="post">
+                <div class="d-flex flex-row pb-3">
+                  <div class="form-check d-flex align-items-center">
+                    <input
+                      name="radioNoLabel"
+                      class="form-check-input mt-0"
+                      type="radio"
+                      checked
+                      value="cod"
+                    />
+                  </div>
+                  <div
+                    class="rounded border d-flex w-100 p-3 align-items-center payment-method"
+                  >
+                    <p class="mb-0">
+                      <i class="fab fa-cc-visa fa-lg text-primary pe-2"></i>COD
+                    </p>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-row">
+                  <div class="form-check d-flex align-items-center">
+                    <input
+                      name="radioNoLabel"
+                      class="form-check-input mt-0"
+                      type="radio"
+                      value="mastercard"
+                    />
+                  </div>
+                  <div
+                    class="rounded border d-flex w-100 p-3 align-items-center payment-method"
+                  >
+                    <p class="mb-0">
+                      <i class="fab fa-cc-mastercard fa-lg text-dark pe-2"></i
+                      >Mastercard Office
+                    </p>
+                    <div class="ms-auto">*********1038</div>
+                  </div>
+                </div>
+                <input
+                  name="payment-cart"
+                  type="submit"
+                  value="Proceed to payment"
+                  class="btn btn-success btn-block btn-lg mt-3"
+                />
+              </form>
+            </div>
+          </div>
+
+          <div class="col-md-5 col-xl-4 offset-xl-1">
+            <div class="py-4 d-flex justify-content-end">
+              <h6>
+                <a href=" {{url_for('view.product')}} "
+                  >Cancel and return to website</a
+                >
+              </h6>
+            </div>
+            <div
+              class="rounded d-flex flex-column p-2"
+              style="background-color: #f8f9fa"
+            >
+              <div class="p-2 me-3">
+                <h4>Your Order</h4>
+              </div>
+              <div class="p-2 d-flex">
+                <div class="col-8">
+                  Product Price
+                  <span class="text-secondary"
+                    >{{ buy_product.buyer_quantity }}x</span
+                  >
+                </div>
+                <div class="ms-auto">₱{{ buy_product.total_price }}</div>
+              </div>
+              <div class="p-2 d-flex">
+                <div class="col-8">Courier (J&T)</div>
+                <div class="ms-auto">₱{{ courier }}</div>
+              </div>
+              <div class="border-top px-2 mx-2"></div>
+              <div class="border-top px-2 mx-2"></div>
+              <div class="p-2 d-flex pt-3">
+                <div class="col-8"><b>Total</b></div>
+                <div class="ms-auto">
+                  <b class="text-success">₱{{ total }}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/addcart_buy.js') }}"></script>
+<script src="{{ url_for('static', filename='js/add_product.js') }}"></script>
+
+{% endblock %}

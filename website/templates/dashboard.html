@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+
+{% block title %}Shopping{% endblock %}
+
+{% block body %}
+
+<div class="container py-5">
+    <h2 class="pb-3">Dashboard</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="card mb-2">
+                <div class="card-header bg-white border-0 d-flex align-items-center">
+                    <h5 class="px-4 mt-2">Sales Report</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container d-flex justify-content-center align-items-center">
+                        <canvas id="dailyIncome" height="20"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-12 col-md-6 col-lg-6">
+            <div class="card mb-2">
+                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between">
+                    <h5 class="px-4 mt-2">Day Sales Report</h5>
+                    <input type="date" id="graphDate">
+                </div>
+                <div class="card-body">
+                    <div class="chart-container d-flex justify-content-center align-items-center">
+                        <canvas id="incomeByDate" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card mb-2" id="salesCard">
+                <h5 class="p-4">Recent Order</h5>
+                <div class="" style="overflow: auto;">
+                    <table class=" text-center sales-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#Product ID</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Product Category</th>
+                                <th scope="col">Original Price</th>
+                                <th scope="col">Sold Quantity</th>
+                                <th scope="col">Total Price</th>
+                                <th scope="col">Flavour</th>
+                                </tr>
+                        </thead>
+                        <tbody id="salesProduct">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sales_product.js') }}"></script>
+{% endblock %}

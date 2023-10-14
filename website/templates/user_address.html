@@ -1,0 +1,333 @@
+{% extends "base.html" %} {% block title %}User Address{% endblock %} {% block
+body %}
+
+<div class="container text-center" id="user-data">
+  <h2 class="my-3" id="title">User's Address</h2>
+</div>
+
+<!-- Modal Forms -->
+
+<div class="container" id="modal-container">
+  <button
+    type="button"
+    class="btn btn-dark d-flex align-items-center justify-content-center w-100 mt-3"
+    data-bs-toggle="modal"
+    data-bs-target="#settingModal"
+    id="addAddress"
+  >
+    <div class="house">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        fill="currentColor"
+        class="bi bi-house-gear"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.708L8 2.207l-5 5V13.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 2 13.5V8.207l-.646.647a.5.5 0 1 1-.708-.708L7.293 1.5Z"
+        />
+        <path
+          d="M11.886 9.46c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.044c-.613-.181-.613-1.049 0-1.23l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"
+        />
+      </svg>
+    </div>
+    <span class="ms-2">Add Address</span>
+  </button>
+
+  <!-- update button -->
+  <button
+    type="button"
+    class="btn btn-dark d-flex align-items-center justify-content-center w-100 mt-3 update-modal"
+    data-bs-toggle="modal"
+    data-bs-target="#updateModal"
+    id="updateAddress"
+  >
+    <div class="house">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        fill="currentColor"
+        class="bi bi-house-gear"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.708L8 2.207l-5 5V13.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 2 13.5V8.207l-.646.647a.5.5 0 1 1-.708-.708L7.293 1.5Z"
+        />
+        <path
+          d="M11.886 9.46c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.044c-.613-.181-.613-1.049 0-1.23l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"
+        />
+      </svg>
+    </div>
+    <span class="ms-2">Update Address</span>
+  </button>
+
+  <!-- delete modal button -->
+  <button
+    type="button"
+    class="btn btn-danger d-flex align-items-center justify-content-center w-100 mt-3 update-modal"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteModal"
+    id="deleteAddress"
+  >
+    <div class="house">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        fill="currentColor"
+        class="bi bi-trash"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
+        />
+        <path
+          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
+        />
+      </svg>
+    </div>
+    <span class="ms-2">Delete Address</span>
+  </button>
+
+  <div class="modal fade" id="settingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalTitle">Add Address</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- add user address form -->
+          <form id="user-form-setting" method="post">
+            <div class="row g-3">
+              <div class="col-6">
+                <label for="username" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div class="col-6">
+                <label for="contact" class="form-label">Contact Number</label>
+                <input
+                  type="text"
+                  pattern="\d*"
+                  maxlength="11"
+                  class="form-control"
+                  id="contact"
+                  placeholder="09123456789"
+                />
+              </div>
+              <div class="col-12">
+                <label for="email" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="example@gmail.com"
+                />
+              </div>
+              <div class="col-12">
+                <label for="address" class="form-label">Home Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  placeholder="Manila Street."
+                />
+              </div>
+              <div class="col-6">
+                <label for="city" class="form-label">City</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  placeholder="Zambales City"
+                />
+              </div>
+              <div class="col-6 mb-3">
+                <label for="zipcode" class="form-label">Zipcode</label>
+                <input
+                  type="text"
+                  pattern="\d*"
+                  maxlength="11"
+                  class="form-control"
+                  id="zipcode"
+                  placeholder="2200"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                id="btnSetting"
+                class="btn btn-dark"
+                data-bs-dismiss="modal"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- update modal -->
+
+  <div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalTitle">Update Address</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- add user address form -->
+          <form id="update-setting" method="post">
+            <div class="row g-3">
+              <div class="col-6">
+                <label for="uname" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="uname"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div class="col-6">
+                <label for="ucontact" class="form-label">Contact Number</label>
+                <input
+                  type="text"
+                  pattern="\d*"
+                  maxlength="11"
+                  class="form-control"
+                  id="ucontact"
+                  placeholder="09123456789"
+                />
+              </div>
+              <div class="col-12">
+                <label for="uemail" class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="uemail"
+                  placeholder="example@gmail.com"
+                />
+              </div>
+              <div class="col-12">
+                <label for="uaddress" class="form-label">Home Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="uaddress"
+                  placeholder="Manila Street."
+                />
+              </div>
+              <div class="col-6">
+                <label for="ucity" class="form-label">City</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ucity"
+                  placeholder="Zambales City"
+                />
+              </div>
+              <div class="col-6 mb-3">
+                <label for="uzipcode" class="form-label">Zipcode</label>
+                <input
+                  type="text"
+                  pattern="\d*"
+                  maxlength="11"
+                  class="form-control"
+                  id="uzipcode"
+                  placeholder="2200"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                id="btnSetting"
+                class="btn btn-dark"
+                data-bs-dismiss="modal"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalTitle">Delete Address</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- Delete Data -->
+          <p>Are you sure you want to delete your address?</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            id="deleteSetting"
+            class="btn btn-danger"
+            data-bs-dismiss="modal"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/userAddress.js') }}"></script>
+
+{% endblock %}
+

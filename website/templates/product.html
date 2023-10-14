@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block title %} Products {% endblock %} {% block
+body %}
+
+<div class="container my-5">
+  <div class="row g-2">
+    <div class="col-lg-6">
+      <div
+        class="py-5 px-3 rounded"
+        style="
+          background: url(../static/assets/banner8.jpg) no-repeat;
+          background-size: cover;
+          background-position: center;
+          height: 600px;
+        "
+      ></div>
+    </div>
+    <div class="col-lg-6 all_products_banner">
+      <div class="row g-2">
+        <div class="col-12">
+          <div
+            class="py-5 px-3 rounded"
+            style="
+              background: url(../static/assets/banner5.jpg) no-repeat;
+              background-size: cover;
+              background-position: center;
+              height: 295px;
+            "
+          ></div>
+        </div>
+        <div class="col-12">
+          <div
+            class="py-5 px-3 rounded"
+            style="
+              background: url(../static/assets/banner7.png) no-repeat;
+              background-size: cover;
+              background-position: center;
+              height: 295px;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4 bg-light border-0 my-5">
+    <!-- card body -->
+    <div class="card-body">
+      <h2 class="mb-0 fs-1 productTitle">Products</h2>
+    </div>
+  </div>
+  <div
+    class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 text-center"
+    id="allProductRow"
+  >
+    <!-- Where all the praduct inserted -->
+  </div>
+</div>
+
+<!-- addcart body -->
+<div class="modal fade" id="addcartBody" tabindex="-1" aria-hidden="true">
+  <div
+    class="alert alert-success alert-dismissible fade show mastercard-alert w-75"
+    role="alert"
+    id="addcart-alert"
+  ></div>
+  <div class="modal-dialog">
+    <div class="modal-content" id="addcartModal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalTitle">Add Cart</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <div class="productId" id="{{posts.id | safe}}"></div>
+        <section id="flavour text-center" class="cartToPost"></section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button id="chooseCart" class="btn btn-success">Add Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end of addcart body -->
+
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/all_products.js') }}"></script>
+<script src="{{ url_for('static', filename='js/addcart.js') }}"></script>
+{% endblock %}

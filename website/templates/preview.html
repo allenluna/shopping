@@ -1,0 +1,513 @@
+{% extends "base.html" %} {% block title %} Preview {% endblock %} 
+{% block body
+%}
+
+
+
+<div class="container">
+
+  <a href="{{ back }}" class="text-secondary mt-5">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle my-3" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+    </svg>
+  </a>
+</div>
+
+<div class="container bg-white rounded-3 p-3">
+
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-inner">
+          
+          {% for imageVal in range(posts.image_url.title | length) %}
+          
+              <div class="carousel-item preview-active">
+                
+                <img
+                  src="../static/img/{{posts.image_url.title[imageVal][1]}}"
+                  class="d-block w-100"
+                  alt="{{posts.title}}"
+                  height="400"
+                />
+              </div>
+              {% endfor %}
+            </div>
+            <div class="row row-cols-4 g-2">
+              {% for imageVal in range(posts.image_url.title | length) %}
+              <div class="col py-2 text-center">
+                <button
+                  type="button"
+                  data-bs-target="#carouselExampleIndicators"
+                  data-bs-slide-to="{{imageVal}}"
+                  class="active border bg-white m-sm-1 rounded-2"
+                  aria-current="true"
+                  aria-label="Slide {{imageVal + 1}}"
+                >
+                  <img
+                    src="../static/img/{{posts.image_url.title[imageVal][1]}}"
+                    class="d-block w-100"
+                    alt="{{posts.title}}"
+                    height="80"
+                  />
+                </button>
+              </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-sm-12 p-5">
+      <div class="div my-2">
+          <small class="text-success">{{ posts.category }}</small>
+
+        <p class="fs-1">{{ posts.title }}</p>
+        <p class="fs-5 text-secondary">Ratings: 
+          <span class="star-rating"
+          style="
+          background-image: linear-gradient(to right,gold 0%,gold {{rating}}%,transparent {{rating}}%,transparent 100%);"
+          >
+          </span>
+          {{rating_num}}
+        </p>
+        <small class="fs-3">₱{{ posts.price }}</small>
+      </div>
+      <hr class="my-2" />
+          <div class="quantity">
+            <small class="text-secondary pe-4">Quantity:</small>
+            <button type="button" class="quantityDec" id="quantityDec">-</button>
+            <input
+              name="item_quantity"
+              type="text"
+              id="counting"
+              readonly="readonly"
+              pattern="\d*"
+              class="text-center"
+              value="1"
+            />
+            <button type="button" class="quantityInc" id="quantityInc">+</button>
+            
+          </div>
+
+      
+        <div class="row py-3">
+          <div class="col my-3">
+            <a
+              class="btn btn-success w-100 fs-5"
+              name="btn"
+              data-bs-toggle="modal"
+              data-bs-target="#buyModalBody"
+            >
+            Buy
+            </a>
+          </div>
+
+          <div class="col my-3">
+            <a
+              id = "addcard"
+              data-bs-toggle="modal"
+              data-bs-target="#addcartBody"
+              class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center"
+              href="{{ url_for('addcart.add_cart', product_id=posts.id) }}"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-cart-plus"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"
+                />
+                <path
+                  d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+                /></svg
+              ><span class="mx-2 fs-5">Add</span>
+            </a>
+          </div>
+        </div>
+      
+    </div>
+
+      <div class="modal fade" id="buyModalBody" tabindex="-1" aria-hidden="true">
+        <div
+        class="alert alert-danger alert-dismissible fade show mastercard-alert w-75"
+        role="alert"
+        id="preview-alert"
+        >
+      </div>
+      <div class="modal-dialog">
+
+        <div class="modal-content position-relative" id="addcartModal">
+
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalTitle">Flavour</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          
+            <div class="modal-body text-center">
+              <!-- add user address form -->
+              <div class="productId" id="{{posts.id | safe}}"></div>
+              <section id="flavour text-center">
+                  {% for imageVal in range(posts.image_url.title | length) %}
+                  <button id="{{imageVal}}" class="cartFlavour m-3 text-success p-2 buyCart flavCart{{imageVal}}" type="button">
+                    <div class="d-flex flex-column">
+                      <img src="../static/img/{{posts.image_url.title[imageVal][1]}}" height="100" alt="">
+                      <small class="my-2">{{posts.image_url.title[imageVal][0]}}</small>
+                    </div>
+                  </button>
+                  {% endfor %}
+              </section>
+
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                id="{{posts.id | safe}}"
+                class="btn btn-success buyProduct "
+              >
+                Buy
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- addcart body -->
+    <div class="modal fade" id="addcartBody" tabindex="-1" aria-hidden="true">
+      <div
+      class="alert alert-success alert-dismissible fade show mastercard-alert w-75"
+      role="alert"
+      id="related-addcart-alert"
+    ></div>
+      <div class="modal-dialog">
+        <div class="modal-content" id="addcartModal">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalTitle">Add Cart</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          
+            <div class="modal-body text-center">
+              <!-- add user address form -->
+              <div class="productId" id="{{posts.id | safe}}"></div>
+              <section id="flavour text-center">
+                  {% for imageVal in range(posts.image_url.title | length) %}
+                  <button id="{{imageVal}}" class="cartFlavour m-3 text-success p-2 flavCart flavCart{{imageVal}}" type="button">
+                    <div class="d-flex flex-column">
+                      <img src="../static/img/{{posts.image_url.title[imageVal][1]}}" height="100" alt="">
+                      <small class="my-2">{{posts.image_url.title[imageVal][0]}}</small>
+                    </div>
+                  </button>
+                  {% endfor %}
+              </section>
+
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                id="chooseCart"
+                class="btn btn-success"
+              >
+                Add Cart
+              </button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- end of addcart body -->
+    <!-- review section -->
+    <div class=" my-5">
+      <div class="row">
+        <div class="col-12">
+
+          <!-- Nav -->
+          <div class="nav nav-tabs nav-overflow justify-content-start justify-content-md-center border-bottom">
+            <a class="nav-link active text-dark review-nav" data-bs-toggle="tab" href="#descriptionTab">
+              Description
+            </a>
+            <a class="nav-link text-dark review-nav" data-bs-toggle="tab" href="#sizeTab">
+              Shipping Information
+            </a>
+            <a class="nav-link text-dark review-nav" data-bs-toggle="tab" href="#shippingTab">
+              Customer Review
+            </a>
+          </div>
+
+          <!-- Content -->
+          <div class="tab-content">
+            <div class="tab-pane fade active show" id="descriptionTab">
+              <div class="row justify-content-center py-9">
+                <div class="col-12 col-lg-10 col-xl-8">
+                  <div class="row">
+                    <div class="my-5">
+                      <div class="mb-5">
+                        <!-- text -->
+                        <h4 class="mb-1">Nutrient Value &amp; Benefits</h4>
+                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nisi, tellus iaculis urna
+                          bibendum
+                          in lacus, integer. Id imperdiet vitae varius sed magnis eu nisi nunc sit. Vel, varius
+                          habitant ornare ac rhoncus. Consequat risus facilisis ante ipsum netus risus adipiscing
+                          sagittis sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                      </div>
+                      <div class="mb-5">
+                        <h5 class="mb-1">Storage Tips</h5>
+                        <p class="mb-0">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae tempore eos cupiditate minus vitae, similique commodi provident? Quod optio, delectus amet recusandae odio suscipit ipsa ducimus ea cupiditate perspiciatis laboriosam aperiam ipsum eveniet nam? Ad nisi blanditiis eos et nulla dicta, impedit alias! Beatae doloribus labore ullam, neque veritatis quibusdam.
+                        </p>
+                      </div>
+                      <!-- content -->
+                      <div class="mb-5">
+                        <h5 class="mb-1">Unit</h5>
+                        <p class="mb-0">3 units</p>
+                      </div>
+                      <div class="mb-5">
+                        <h5 class="mb-1">Seller</h5>
+                        <p class="mb-0">Luna Mart Pvt. LTD</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="sizeTab">
+              <div class="row justify-content-center py-9">
+                <div class="col-12 col-lg-10 col-xl-8">
+                  <div class="row">
+                    <table class="table table-bordered table-sm table-hover my-5">
+                      <thead>
+                        <tr>
+                          <th class="p-3">Shipping Options</th>
+                          <th class="p-3">Delivery Time</th>
+                          <th class="p-3">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="p-3">Standard Shipping</td>
+                          <td class="p-3">Delivery in 5 - 7 working days</td>
+                          <td class="p-3">$8.00</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3">Express Shipping</td>
+                          <td class="p-3">Delivery in 3 - 5 working days</td>
+                          <td class="p-3">$12.00</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3">1 - 2 day Shipping</td>
+                          <td class="p-3">Delivery in 1 - 2 working days</td>
+                          <td class="p-3">$12.00</td>
+                        </tr>
+                        <tr>
+                          <td class="p-3">Free Shipping</td>
+                          <td class="p-3">
+                            Living won't the He one every subdue meat replenish
+                            face was you morning firmament darkness.
+                          </td>
+                          <td class="p-3"$0.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="shippingTab">
+              <div class="row justify-content-center py-9">
+                <div class="col-12 col-lg-10 col-xl-8">
+
+                  <!-- user post comment -->
+                  
+                    
+                    <h4 class="py-5">Reviews</h4>
+                    <div class="comment-post" id="commentDataSection">
+                      <!-- Where comment push -->
+                    </div>
+
+                  <!--Comment section -->
+                  
+                  <form id="commentSection" action="" method="post" enctype="multipart/form-data" class="my-5">
+
+                    <div class="border-bottom py-4 mb-3">
+                      <h5>Add a photo or video</h5>
+                      <div class="input-group mb-3">
+                        <input name="file-comment" type="file" class="form-control" id="fileComment">
+                        <label class="input-group-text" for="fileComment">Upload</label>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 border-bottom py-4">
+                      <h5>Add a headline</h5>
+                      <input name="headline" id="headline" type="text" class="form-control focus-ring focus-ring-success" placeholder="What's more important to know">
+                    </div>
+
+                    <div class="mb-3 py-4 border-bottom">
+                      <h5>Add a review</h5>
+                      <textarea name="review" class="form-control focus-ring focus-ring-success" id="review" rows="3" placeholder="What did you like or dislike?"></textarea>
+                    </div>
+
+                    <div class="mb-3 py-4 border-bottom">
+                      <h5>Add rating</h5>
+                      <select name="rating" id="rating" class="form-select focus-ring focus-ring-success" aria-label="Default select example">
+                        <option selected value="⭐">⭐</option>
+                        <option value="⭐⭐">⭐⭐</option>
+                        <option value="⭐⭐⭐">⭐⭐⭐</option>
+                        <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+                        <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+                      </select>
+                    </div>
+                    <input type="submit" value="Submit Review" class="btn btn-dark">
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container bg-white rounded-3 my-5 py-5 px-3 position-relative">
+  <div class="text-header">
+    <h2>Related Product</h2>
+  </div>
+
+	<div class="row">
+		<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+            <div class="MultiCarousel-inner" id="preview_carousel_product">
+              {% for new_snack in range (related_product | length) %}
+                <div class="item">
+                    <div class="pad15">
+                      <a href="{{ url_for('view.preview', q=related_product[new_snack].id) }}" class="nav-link">
+                        <div class="card hover-success">
+                          <div class="img-wrapper">
+                            <img
+                              src="../static/img/{{related_product[new_snack].image_url.title[0][1]}}"
+                              class="card-img-top p-lg-4 p-md-3"
+                              alt="{{ related_product[new_snack].tite }}"
+                            />
+                          </div>
+                          <div class="card-body text-start c-body">
+                            <div class="c-summary lh-sm mb-3">
+                              <small class="text-secondary">{{ related_product[new_snack].category }}</small>
+                              <p class="card-text text-dark">{{ related_product[new_snack].title }}</p>
+                              <p class="lh-sm rating">
+                                <span class="star-rating"
+                                style="
+                                background-image: linear-gradient(to right,gold 0%,gold {{rating}}%,transparent {{rating}}%,transparent 100%);"
+                                >
+                                </span>
+                                {{rating_num}}
+                              </p>
+                              
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center py-2 c-button">
+                              <small>₱{{related_product[new_snack].price}}</small>
+                              <a
+                                href=""
+                                class="btn btn-success btn-sm d-flex align-items-center"
+                                data-bs-toggle="modal"
+                                data-bs-target="#prevAddcartBody"
+                                id="{{related_product[new_snack].id}}"
+                              >
+                                + Add
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="btn btn-success leftLst"><</button>
+            <button class="btn btn-success rightLst">></button>
+        </div>
+	</div>
+
+
+</div>
+
+
+<!-- addcart  -->
+
+<div class="modal fade" id="prevAddcartBody" tabindex="-1" aria-hidden="true">
+  <div
+    class="alert alert-success alert-dismissible fade show mastercard-alert w-75"
+    role="alert"
+    id="addcart-alert"
+  ></div>
+  <div class="modal-dialog">
+    <div class="modal-content" id="addcartModal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalTitle">Add Cart</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      
+        <div class="modal-body text-center">
+          
+          <div class="productId" id=""></div>
+          <section id="flavour text-center" class="prevCartToPost">
+            
+          </section>
+
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            id="prevChooseCart"
+            class="btn btn-success"
+          >
+            Add Cart
+          </button>
+        </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/preview_related.js') }}"></script>
+<script src="{{ url_for('static', filename='js/flavourCart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/comment.js') }}"></script>
+<script src="{{ url_for('static', filename='js/preview_carousel_product.js') }}"></script>
+<script src="{{ url_for('static', filename='js/add_product.js') }}"></script>
+{% endblock %}

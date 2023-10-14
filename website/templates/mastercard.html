@@ -1,0 +1,266 @@
+{% extends "base.html" %} {% block title %} Payment {% endblock %} {% block body
+%}
+
+<section class="gradient-custom">
+  <div class="container my-5 py-5">
+    <div class="row d-flex justify-content-center py-5">
+      <div class="col-md-7 col-lg-5 col-xl-4">
+        <div class="card" style="border-radius: 15px">
+          <div class="card-body p-4">
+            <form method="post" id="mastercardFormData">
+              <div class="d-flex justify-content-between mb-3">
+                <div class="form-outline">
+                  <input
+                    type="text"
+                    id="cardNumber"
+                    class="form-control form-control-lg"
+                    siez="17"
+                    placeholder="1234 5678 9012 3457"
+                    minlength="19"
+                    maxlength="19"
+                  />
+                  <label class="form-label" for="typeText">Card Number</label>
+                </div>
+                <img
+                  src="https://www.freepnglogos.com/uploads/mastercard-png/mastercard-marcus-samuelsson-group-2.png"
+                  alt="mastercard"
+                  width="64px"
+                  height="60"
+                />
+              </div>
+
+              <div class="d-flex mb-4">
+                <div class="form-outline">
+                  <input
+                    type="text"
+                    id="cardName"
+                    class="form-control form-control-lg"
+                    placeholder="Cardholder's Name"
+                  />
+                  <label class="form-label" for="typeName"
+                    >Cardholder's Name</label
+                  >
+                </div>
+              </div>
+
+              <div class="d-flex falign-items-center pb-2">
+                <div class="form-outline me-3">
+                  <input
+                    type="text"
+                    id="expDate"
+                    class="form-control form-control-lg"
+                    placeholder="MM/YYYY"
+                    size="7"
+                    minlength="7"
+                    maxlength="7"
+                  />
+                  <label class="form-label" for="typeExp">Expiration</label>
+                </div>
+                <div class="form-outline">
+                  <input
+                    type="password"
+                    id="cvv"
+                    class="form-control form-control-lg"
+                    placeholder="&#9679;&#9679;&#9679;"
+                    size="3"
+                    minlength="3"
+                    maxlength="3"
+                  />
+                  <label class="form-label" for="typeText2">Cvv</label>
+                </div>
+              </div>
+              <div class="checkoutSubmit">
+                {% if addcart_item%}
+                <div class="addcartItemId" id="{{addcart_item.id}}"></div>
+                <button
+                  type="submit"
+                  class="btn btn-success btn-lg btn-rounded mb-2 w-100 addcart_item"
+                  id="paymentSubmit"
+                  data-bs-toggle="modal"
+                  data-bs-target="#paymentModal"
+                >
+                  Check Out
+                </button>
+                {% elif product_item%}
+                <div class="productItemId" id="{{product_item.id}}"></div>
+                <div
+                  class="productItemimagePos"
+                  id="{{product_item_imagepos}}"
+                ></div>
+                <div
+                  class="productItemFilename"
+                  id="{{product_item_filename}}"
+                ></div>
+                <button
+                  type="submit"
+                  class="btn btn-success btn-lg btn-rounded mb-2 w-100 d-flex align-items-center justify-content-center product_item"
+                  id="paymentSubmit"
+                  data-bs-toggle="modal"
+                  data-bs-target="#paymentModal"
+                >
+                  Check Out
+                </button>
+                {% else %}
+                <div class="addcartListId" id="{{addcart_list_id}}"></div>
+                <button
+                  type="submit"
+                  class="btn btn-success btn-lg btn-rounded mb-2 w-100 d-flex align-items-center justify-content-center addcart_list_id"
+                  id="paymentSubmit"
+                  data-bs-toggle="modal"
+                  data-bs-target="#paymentModal"
+                >
+                  Check Out</button
+                >{% endif %}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="paymentModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="paymentModalLabel"
+  aria-hidden="true"
+>
+  <div class="container mt-3"></div>
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content position-relative">
+      <div
+        class="alert alert-danger alert-dismissible fade show mastercard-alert w-75"
+        role="alert"
+        id="checkout-alert"
+      >
+        Please fill out all fields.
+      </div>
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="paymentModalLabel">Checkout</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- checkout item data -->
+        {% if addcart_item %}
+        <div class="addcart_item_id" id="{{addcart_item.id}}"></div>
+        <div class="ms-5 text-center">
+          <div class="d-flex checkout-items">
+            <div class="text-center p-2">
+              <img
+                class="chekout-img"
+                src="../static/img/{{ addcart_item.image_url[1] }}"
+                alt="{{ addcart_item.title }}"
+              />
+            </div>
+            <div class="lh-1 chout-items-price mt-4">
+              <p class="fs-4 text-success">₱{{ addcart_item.total_price }}</p>
+              <p class="fs-5 text-secondary">{{ addcart_item.price }}</p>
+              <p class="fs-5 text-secondary">{{ addcart_item.title }}</p>
+              <p class="fs-5 text-secondary">
+                Qty:{{ addcart_item.buyer_quantity }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% elif product_item%}
+        <div class="product_item_id" id="{{product_item.id}}"></div>
+        <div class="ms-5 text-center">
+          <div class="d-flex checkout-items">
+            <div class="text-center p-2">
+              <img
+                class="chekout-img"
+                src="../static/img/{{ product_item.image_url.title[product_item_imagepos][product_item_filename] }}"
+                alt="{{ product_item.title }}"
+              />
+            </div>
+            <div class="lh-1 chout-items-price mt-4">
+              <p class="fs-4 text-success">₱{{ product_item.total_price }}</p>
+              <p class="fs-5 text-secondary">₱{{ product_item.price }}</p>
+              <p class="fs-5 text-secondary">{{ product_item.title }}</p>
+              <p class="fs-5 text-secondary">
+                Qty:{{ product_item.buyer_quantity }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="orders-data d-flex flex-wrap align-items-center">
+          {% for product in orders %}
+          <div class="ordersId" id="{{product.id}}"></div>
+          <div class="ms-5">
+            <div class="checkout-items d-flex">
+              <div class="text-center p-2">
+                <img
+                  class="chekout-img"
+                  src="../static/img/{{ product.image_url[1] }}"
+                  alt="{{product.title}}"
+                />
+              </div>
+              <div class="lh-1 chout-items-price text-center align-self-center">
+                <p class="fs-4 text-success">
+                  ₱{{ product.price * product.buyer_quantity }}
+                </p>
+                <p class="fs-5 text-secondary">{{ product.title }}</p>
+                <p class="fs-5 text-secondary">
+                  Qty:{{ product.buyer_quantity }}
+                </p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="modal-footer" id="modalPaymentFooter"></div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="checkoutPayment"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="checkoutPaymentLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="success-checkmark">
+          <div class="check-icon">
+            <span class="icon-line line-tip"></span>
+            <span class="icon-line line-long"></span>
+            <div class="icon-circle"></div>
+            <div class="icon-fix"></div>
+          </div>
+        </div>
+        <p class="fs-3 text-center my-2">Order has been sent.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block script %}
+<script src="../static/js/addcart_buy.js"></script>
+<script src="../static/js/mastercard.js"></script>
+<script src="{{ url_for('static', filename='js/add_product.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "header.html" %}
+
+{% block content %}
+<main id="main-product" class="form-signin w-50 m-auto container mt-5 text-center">
+
+    
+         
+
+    <form id="form-data" method="post" enctype="multipart/form-data">
+        <h1 class="">New Product</h1>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="category">Category</label>
+          <select name="category" class="form-select" id="category">
+            <option selected>Choose...</option>
+            <option value="Snack & Munchies">Snack & Munchies</option>
+            <option value="Bread & Biscuit">Bread & Biscuit</option>
+            <option value="Coffee & Tea">Coffee & Tea</option>
+          </select>
+        </div>
+        <div class="form-floating mb-2">
+            <input name="title" type="text" class="form-control" id="title" placeholder="Title">
+            <label for="title">Title</label>
+          </div>
+          <div class="form-floating mb-2">
+            <input name="price" type="text" class="form-control" id="price" placeholder="Price">
+            <label for="price">Price</label>
+          </div>
+          <div class="form-floating mb-2">
+            <input name="quantity" type="number" class="form-control" id="quantity" placeholder="Quantity">
+            <label for="quantity">Quantity</label>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file1" class="form-control" type="file" id="file1">
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file2" class="form-control" type="file" id="file2">
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file3" class="form-control" type="file" id="file3">
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file4" class="form-control" type="file" id="file4">
+            </div>
+          </div>
+          <div class="form-floating ">
+            <button class="btn btn-dark w-50 my-2" id="productBtn">Submit</button>
+          </div>
+          
+    </form>
+  
+</main>
+
+{% endblock %}

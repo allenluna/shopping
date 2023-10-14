@@ -1,0 +1,77 @@
+{% include "header.html" %}
+
+{% if current_user.is_authenticated %}
+
+<div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="text-start alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{message}}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Your Order</h4>
+              <div class="row   ">
+              <div class="col-8">
+                <p  class="text-dark"> <strong>Name: </strong>{{ user_info.name }}</p>
+                <p  class="text-dark"> <strong>Email: </strong>{{ user_info.email }}</p>
+                <p  class="text-dark"> <strong>Address: </strong>{{ user_info.address }}</p>
+                <p  class="text-dark"> <strong>City: </strong>{{ user_info.city }}</p>
+                <p  class="text-dark"> <strong>Zipcode: </strong>{{ user_info.zipCode }}</p>
+                <p  class="text-dark"> <strong>Payment: </strong>{{ user_info.payment }}</p>
+              </div>
+              <hr class="my-4">
+              
+              <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th scope="col">Your Order</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">QTY</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Courier</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Total Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% for cart in range(current_user.add_cart | length) %}
+                  <tr>
+                    <td><img src="data:;base64,{{current_user.add_cart[cart].data1.decode()}}" class="w-50" alt="" height="100"></td>
+                    <td>{{ current_user.add_cart[cart].title }}</td>
+                    <td>{{ current_user.add_cart[cart].buyer_quantity }}</td>
+                    <td>₱{{ current_user.add_cart[cart].price }}</td>
+                    <td>₱{{ courier }}</td>
+                    <td>₱{{ current_user.add_cart[cart].total }}</td>
+                    <td>₱{{ current_user.add_cart[cart].total_price }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-end">
+                <p class="fs-4"><strong>Total: </strong><span class="text-success">₱{{ total_price }}</span></p>
+              </div>
+                <div class="col-12 text-end">
+                  <button type="submit" class="btn btn-success">Check out</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+</div>
+{% else %}
+<h1 class="text-center mt-5">404</h1>
+<p class="text-center">Please log in <a href="{{ url_for('auth.login') }}">here</a></p>
+
+
+
+{% endif %}

@@ -1,0 +1,98 @@
+{% extends "header.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Products buyer's Choose-->
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <div id="carouselExampleIndicators" class="carousel slide">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              {% for item in range(product.image_url.title | length) %}
+                <div class="carousel-item" id="prevImage">
+                  <img src="../static/assets/{{product.image_url.title[item][1]}}" class="d-block w-100" height="400" alt="...">
+                </div>
+              {% endfor %}
+            </div>
+            <div class="row row-cols-4">
+              {% for item in range(product.image_url.title | length) %}
+                <div class="col">
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{item}}" class="active" aria-current="true" aria-label="Slide {{item + 1}}">
+                    <img src="../static/assets/{{product.image_url.title[item][1]}}" height="100" alt="...">
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+            
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 p-3">
+          <small class="text-success">{{ product.category }}</small>
+          <h2>{{ product.title }}</h2>
+          <span class="text-success">₱{{ product.price }}</span>
+          <hr>
+          <small>Quantity:</small>
+          <div class="quantity">
+            <button id="previewDecrement">-</button>
+            <input type="text" pattern="/d*" maxlength="1" id="counting">
+            <button id="previewIncrement">+</button>
+          </div>
+          <div class="btnpayment my-5">
+            <div class="row g-2">
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <a href="#" class="btn btn-success w-100" id="prevBuyProduct">Buy</a>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12">
+                <a href="#" 
+                class="btn btn-outline-success w-100" 
+                id="prevAddcartProduct"
+                data-bs-toggle="modal" data-bs-target="#addCartModal"
+                >Add Cart</a>
+
+
+                <!-- cart Modal -->
+
+                <div class="modal fade" id="addCartModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Cart</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body d-flex justify-content-center align-items-center productParentData" id="{{product.id}}">
+
+                        {% for item in range(product.image_url.title | length) %}
+                          <button class="productModalData text-center m-2 bg-white previewModalData p-2" id="{{item}}">
+                            <img src="../static/assets/{{product.image_url.title[item][1]}}" width="100" height="100" alt="">
+                            <p class="text-success">{{product.image_url.title[item][0]}}</p>
+                          </button>
+                        {% endfor %}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="proceedCart">Add Cart</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- end of cart modal -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

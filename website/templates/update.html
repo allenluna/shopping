@@ -1,0 +1,70 @@
+{% include "header.html" %}
+
+<main class="form-signin w-50 m-auto container text-center mt-5">
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+        <div class="text-start alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>{{message}}</strong> Please try again.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="" method="post" enctype="multipart/form-data">
+        <h1>Update</h1>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="inputGroupSelect01">Category</label>
+          <select name="category" class="form-select" id="inputGroupSelect01">
+            <option selected>Choose...</option>
+            <option value="Snack & Munchies">Snack & Munchies</option>
+            <option value="Bread & Biscuit">Bread & Biscuit</option>
+            <option value="Coffee & Tea">Coffee & Tea</option>
+          </select>
+        </div>
+        <div class="form-floating mb-2">
+            <input name="title" type="text" class="form-control" id="floatingInput" placeholder="Title" value="{{ edit_post.title }}">
+            <label for="floatingInput">Title</label>
+          </div>
+          <div class="form-floating mb-2">
+            <input name="price" type="text" class="form-control" id="floatingPassword" placeholder="Price" value="{{ edit_post.price }}">
+            <label for="floatingPassword">Price</label>
+          </div>
+          <div class="form-floating mb-2">
+            <input name="quantity" type="text" class="form-control" id="floatingPassword" placeholder="Quantity" value="{{ edit_post.quantity }}">
+            <label for="floatingPassword">Quantity</label>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file1" class="form-control" type="file" id="formFile" value="{{ edit_post.data1 }}">
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file2" class="form-control" type="file" id="formFile" value="{{ edit_post.data2 }}>
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file3" class="form-control" type="file" id="formFile" value="{{ edit_post.data3 }}>
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file4" class="form-control" type="file" id="formFile" value="{{ edit_post.data4 }}>
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <div class="">
+                <input name="file5" class="form-control" type="file" id="formFile" value="{{ edit_post.data5 }}>
+            </div>
+          </div>
+          <div class="form-floating mb-2">
+            <button class="btn btn-warning w-50 " type="submit">Submit</button>
+          </div>
+          
+    </form>
+  
+</main>

@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block title %}Edit Product{% endblock %} {% block
+body %}
+
+<div class="container mt-5">
+  {% with messages = get_flashed_messages() %} {% if messages %} {% for message
+  in messages %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <strong>{{ message }}!</strong>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+  <form
+    class="container mt-5 w-75 w-md-75"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <h1 class="text-center">Edit Product</h1>
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Product Name</label>
+      <input
+        name="name"
+        type="text"
+        class="form-control"
+        id="name"
+        placeholder="Piknik"
+        value="{{ posts.title }}"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="price" class="form-label">Price</label>
+      <input
+        name="price"
+        type="text"
+        class="form-control"
+        id="price"
+        placeholder="1000"
+        pattern="\d*"
+        value="{{ posts.price }}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="quantity" class="form-label">Quantity</label>
+      <input
+        name="quantity"
+        type="text"
+        class="form-control"
+        id="quantity"
+        placeholder="5000"
+        pattern="\d*"
+        value="{{ posts.quantity }}"
+      />
+    </div>
+
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="inputGroupSelect01">Category</label>
+      <select name="category" class="form-select" id="inputGroupSelect01">
+        <option selected>Choose...</option>
+        <option value="Snack & Munchies">Snack & Munchies</option>
+        <option value="Vegetables">Vegetables</option>
+        <option value="Bakery & Biscuits">Bakery & Biscuits</option>
+      </select>
+    </div>
+
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="inputGroupFile01">Flavor 1</label>
+      <input
+        name="file1"
+        type="file"
+        class="form-control"
+        id="inputGroupFile01"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="inputGroupFile01">Flavor 2</label>
+      <input
+        name="file2"
+        type="file"
+        class="form-control"
+        id="inputGroupFile01"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="inputGroupFile01">Flavor 3</label>
+      <input
+        name="file3"
+        type="file"
+        class="form-control"
+        id="inputGroupFile01"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="inputGroupFile01">Flavor 4</label>
+      <input
+        name="file4"
+        type="file"
+        class="form-control"
+        id="inputGroupFile01"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="inputGroupFile01">Flavor 5</label>
+      <input
+        name="file5"
+        type="file"
+        class="form-control"
+        id="inputGroupFile01"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-dark">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

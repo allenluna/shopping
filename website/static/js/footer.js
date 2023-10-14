@@ -1,0 +1,1 @@
+document.querySelector("#footer-date").innerHTML = `© ${new Date().getFullYear()} Shopping eCommers`

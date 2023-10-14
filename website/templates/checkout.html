@@ -1,0 +1,218 @@
+{% extends "base.html" %} {% block body %}
+
+<div class="container my-5 checkout-width">
+  <div class="card p-3">
+    <div class="row">
+      <div class="col-11 lh-1">
+        <p class="fs-2 d-flex align-items-center">
+          Delivery Address
+          <span class="text-danger px-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="currentColor"
+              class="bi bi-geo-alt"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"
+              />
+              <path
+                d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+              />
+            </svg>
+          </span>
+        </p>
+        {% for setting in current_user.settings%}
+        <p class="fs-6">{{ setting.name }} | +63{{ setting.number }}</p>
+        <p class="fs-6">{{ setting.email }}</p>
+        <p class="fs-6">{{ setting.address }}</p>
+        <p class="fs-6">{{ setting.city }}</p>
+        <p class="fs-6">{{ setting.zipcode }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <hr class="my-2" />
+    <p class="fs-2">Order Summary</p>
+    {% if orders %}
+    <small class="text-secondary">{{ orders | length }} items</small>
+    {% endif %}
+    <div class="order-img">
+      <!-- product items -->
+      {% if product_item %}
+      <div class="">
+        <div class="row checkout-items">
+          <div class="col-lg-2 col-md-3">
+            <img
+              class="chekout-img"
+              src="../static/img/{{ product_item.image_url[1] }}"
+              alt="{{ product_item.title }}"
+            />
+          </div>
+          <div class="col-lg-10 col-md-9 lh-1 chout-items-price">
+            <p class="fs-4">₱{{ product_item.price }}</p>
+            <p class="fs-5 text-secondary">{{ product_item.title }}</p>
+            <p class="fs-5 text-secondary">
+              Qty:{{ product_item.buyer_quantity }}
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endif %} {% if buy_item %}
+      <div class="">
+        <div class="row checkout-items">
+          <div class="col-lg-2 col-md-3">
+            <img
+              class="chekout-img"
+              src="../static/img/{{ buy_item.image_url.title[image_pos][image_filename] }}"
+              alt="{{ buy_item.title }}"
+            />
+          </div>
+          <div class="col-lg-10 col-md-9 lh-1 chout-items-price">
+            <p class="fs-4">₱{{ buy_item.price }}</p>
+            <p class="fs-5 text-secondary">{{ buy_item.title }}</p>
+            <p class="fs-5 text-secondary">Qty:{{ buy_item.buyer_quantity }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- addcart items -->
+      {% for product in orders %}
+
+      <div class="">
+        <div class="row checkout-items">
+          <div class="col-lg-2 col-md-3">
+            <img
+              class="chekout-img"
+              src="../static/img/{{ product.image_url[1] }}"
+              alt="{{product.title}}"
+            />
+          </div>
+          <div class="col-lg-10 col-md-9 lh-1 chout-items-price">
+            <p class="fs-4">₱{{ product.price * product.buyer_quantity }}</p>
+            <p class="fs-5 text-secondary">{{ product.title }}</p>
+            <p class="fs-5 text-secondary">Qty:{{ product.buyer_quantity }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <hr class="my-3" />
+      <!-- order price -->
+      {% if product_item %}
+
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="fs-4">Subtotal:</p>
+        <p class="fs-4">₱{{ product_item.total_price }}</p>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="fs-4">Delivery Fee:</p>
+        <p class="fs-4">₱{{ delivery_fee }}</p>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <strong><p class="fs-4">Total to pay:</p></strong>
+        <strong
+          ><p class="fs-4">
+            ₱{{ product_item.total_price + delivery_fee}}
+          </p></strong
+        >
+      </div>
+      {% else %}
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="fs-4">Subtotal:</p>
+        <p class="fs-4">₱{{ subtotal }}</p>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="fs-4">Delivery Fee:</p>
+        <p class="fs-4">₱{{ delivery_fee }}</p>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <strong><p class="fs-4">Total payment:</p></strong>
+        <strong><p class="fs-4">₱{{ total_pay }}</p></strong>
+      </div>
+      {% endif %}
+    </div>
+    <div id="checkoutButtons" class="w-100">
+      {% if product_item %}
+      <div class="productItemToCheckout" id="{{list_buy_product_id}}"></div>
+      <a
+        id="{{product_item.id}}"
+        class="btn btn-success mt-3 rounded-0 checkoutItem w-100"
+        type="button "
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        >Place order
+      </a>
+      {% elif buy_item %}
+      <div class="image_pos" id="{{image_pos}}"></div>
+      <div class="image_filename" id="{{image_filename}}"></div>
+      <a
+        id="{{buy_item.id}}"
+        class="btn btn-success mt-3 rounded-0 checkoutItem w-100 buy_item"
+        type="button "
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        >Place order</a
+      >
+      {% else %}
+      <!-- {% set id = [] %}
+
+          {% for item in orders %}
+          {{ id.append(item.id) }}
+          {% endfor %} -->
+      <a
+        id="{{list_buy_product_id}}"
+        class="btn btn-success mt-3 rounded-0 checkoutItem w-100 multipleProduct"
+        type="button "
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        >Place order</a
+      >
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- message modal sent -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="success-checkmark">
+          <div class="check-icon">
+            <span class="icon-line line-tip"></span>
+            <span class="icon-line line-long"></span>
+            <div class="icon-circle"></div>
+            <div class="icon-fix"></div>
+          </div>
+        </div>
+        <p class="fs-3 text-center my-2">Order has been sent.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%endblock%} {% block script %}
+
+<script src="../static/js/checkout.js"></script>
+<script src="../static/js/addcart_buy.js"></script>
+<script src="{{ url_for('static', filename='js/add_product.js') }}"></script>
+{% endblock %}

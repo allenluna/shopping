@@ -1,0 +1,210 @@
+{% extends "base.html" %} {% block title %}Shopping{% endblock %} {% block body
+%}
+
+<div class="container mt-5 w-75 banner-container">
+  <div
+    id="carouselExampleInterval"
+    class="carousel slide"
+    data-bs-ride="carousel"
+  >
+    <div class="carousel-indicators">
+      <button
+        type="button"
+        data-bs-target="#carouselExampleInterval"
+        data-bs-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Slide 1"
+      ></button>
+      <button
+        type="button"
+        data-bs-target="#carouselExampleInterval"
+        data-bs-slide-to="1"
+        aria-label="Slide 2"
+      ></button>
+    </div>
+
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="5000">
+        <img
+          src="{{ url_for('static', filename='assets/banner.jpg') }}"
+          class="d-block w-100 rounded-5 banner-image"
+          alt="Banner"
+          height="450"
+        />
+
+        <div
+          class="card-img-overlay p-5 col-lg-5 col-md-6 col-sm-6"
+          style="height: 100%"
+        >
+          <small class="bg-danger text-white px-1 rounded shipping"
+            >Free shipping - over ₱1000</small
+          >
+          <h1 class="card-title mt-lg-2 mt-md-3 mt-sm-2 bannerTitle">
+            Free Shipping on <br />
+            orders over <span class="header-success">₱1000</span>
+          </h1>
+          <p class="card-text text-dark py-2 lead banner-summary">
+            Free Shipping to First-Time Customers Only, After promotions and
+            discounts are applied.
+          </p>
+          <a href="{{ url_for('view.product') }}" class="btn btn-dark"
+            >Shop Now
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-arrow-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+              /></svg
+          ></a>
+        </div>
+      </div>
+      <div class="carousel-item text-white" data-bs-interval="2000">
+        <img
+          src="{{ url_for('static', filename='assets/banner2.jpg') }}"
+          class="d-block w-100 rounded-5 banner-image"
+          alt="Banner"
+          height="450"
+        />
+        <div
+          class="card-img-overlay p-5 col-lg-5 col-md-6 col-sm-6"
+          style="height: 100%"
+        >
+          <small class="bg-danger text-white px-1 rounded shipping"
+            >Up to 20% off - Shop now</small
+          >
+          <h1 class="card-title mt-lg-2 mt-md-3 mt-sm-2 bannerTitle">
+            Ease Online <br />
+            Store Up To <span class="header-success">20% OFF</span>
+          </h1>
+          <p class="card-text py-2 lead banner-summary">
+            Mega Sale for all items only just in 3 Days <br />SHOP NOW!
+          </p>
+          <a href="{{ url_for('view.product') }}" class="btn btn-warning"
+            >Shop Now
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-arrow-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+              /></svg
+          ></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <h2 class="text-start my-4">Popular Products</h2>
+  <div class="row row-cols-2 row-cols-lg-4 g-2 text-center" id="popProducts">
+    <!-- where popular product inserted -->
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="row">
+    <div class="col-12 col-md-6 mb-3 mb-lg-0">
+      <div>
+        <div
+          class="py-5 px-3 rounded"
+          style="
+            background: url(../static/assets/banner3.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+          "
+        >
+          <div>
+            <h3 class="fw-bold mb-1">Fruits &amp; Vegetables</h3>
+            <p class="mb-4">Get Upto <span class="fw-bold">30%</span> Off</p>
+            <a href="{{ url_for('view.product') }}" class="btn btn-dark"
+              >Shop Now</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div>
+        <div
+          class="py-5 px-3 rounded"
+          style="
+            background: url(../static/assets/banner4.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+          "
+        >
+          <div>
+            <h3 class="fw-bold mb-1">Freshly Baked Buns</h3>
+            <p class="mb-4">Get Upto <span class="fw-bold">25%</span> Off</p>
+            <a href="{{ url_for('view.product') }}" class="btn btn-dark"
+              >Shop Now</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="card mb-4 bg-light border-0">
+    <h2 class="">Products</h2>
+  </div>
+  <div
+    class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-2 text-center"
+    id="featuredProd"
+  ></div>
+</div>
+
+<!-- addcart body -->
+
+<div class="modal fade" id="addcartBody" tabindex="-1" aria-hidden="true">
+  <div
+    class="alert alert-success alert-dismissible fade show mastercard-alert w-75"
+    role="alert"
+    id="addcart-alert"
+  ></div>
+  <div class="modal-dialog">
+    <div class="modal-content" id="addcartModal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalTitle">Add Cart</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <div class="productId" id="{{posts.id | safe}}"></div>
+        <section id="flavour text-center" class="cartToPost"></section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button id="chooseCart" class="btn btn-success">Add Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end of addcart body -->
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/addcart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
+{% endblock %}
