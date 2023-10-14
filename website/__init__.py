@@ -43,13 +43,5 @@ def create_app():
     app.register_blueprint(comment, url_prefix="/")
 
     db.init_app(app)
-    create_db(app)
 
     return app
-
-
-def create_db(app):
-    if not os.path.exists(f"sqlite:///{db_path}/shopping.db"):
-        with app.app_context():
-            db.create_all()
-            print("Database created successfully.")
