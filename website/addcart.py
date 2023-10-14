@@ -31,24 +31,31 @@ def productData():
 @addcart.route("/checkout", methods=["GET", "POST"])
 @need_to_authenticate
 def checkout():
-    list_id = request.args.getlist("list_id")
     id = request.args.get("product_id")
-    addcart_id = Addcart.query.filter(Addcart.id.in_(list_id)).all()
     product_item = Addcart.query.get(id)
-
-    subtotal = 0
     delivery_fee = 100
-    total_pay = 0
-    for product in range(len(addcart_id)):
-        subtotal += addcart_id[product].total_price
-        total_pay = subtotal + delivery_fee
-
-    return render_template("checkout.html",
-                           orders=addcart_id, subtotal=subtotal, delivery_fee=delivery_fee,
-                           total_pay=total_pay, current_user=current_user,
+    return render_template("checkout.html", delivery_fee=delivery_fee,
+                           current_user=current_user,
                            product_item=product_item,
-                           list_buy_product_id=list_id
                            )
+
+
+@addcart.route("/list-checkout", methods=["GET", "POST"])
+def list_checkout():
+    list_id = request.args.getlist("list_id")
+    delivery_fee = 100
+    if list_id:
+        addcart_id = Addcart.query.filter(Addcart.id.in_(list_id)).all()
+        subtotal = 0
+        total_pay = 0
+        for product in range(len(addcart_id)):
+            subtotal += addcart_id[product].total_price
+            total_pay = subtotal + delivery_fee
+        return render_template("checkout.html",
+                               orders=addcart_id, subtotal=subtotal, delivery_fee=delivery_fee,
+                               total_pay=total_pay, current_user=current_user,
+                               list_buy_product_id=list_id
+                               )
 
 
 @addcart.route("/checkout-item", methods=["GET", "POST"])
@@ -83,7 +90,8 @@ def proceed_checkout():
 
     if id:
         product_id = Product.query.get(id)
-        addcart_data_item = Addcart.query.filter_by(product_id = product_id.id).first()
+        addcart_data_item = Addcart.query.filter_by(
+            product_id=product_id.id).first()
         image_pos = request.json["imagePos"]
         image_filename = request.json["imageFilename"]
 
@@ -111,7 +119,8 @@ def proceed_checkout():
         db.session.commit()
     elif single_cart_id:
         addcart_item = Addcart.query.get(single_cart_id)
-        product_item = Product.query.filter_by(id = addcart_item.product_id).first()
+        product_item = Product.query.filter_by(
+            id=addcart_item.product_id).first()
 
         addcart_item.quantity -= addcart_item.buyer_quantity
 
@@ -136,9 +145,11 @@ def proceed_checkout():
             eval("".join([itemId for itemId in request.args.getlist("checkoutId")])))
         list_addcart_product = Addcart.query.filter(
             Addcart.id.in_(list_id)).all()
-        
-        list_product_id = [product.product_id for product in list_addcart_product]
-        list_product = Product.query.filter(Product.id.in_(list_product_id)).all()
+
+        list_product_id = [
+            product.product_id for product in list_addcart_product]
+        list_product = Product.query.filter(
+            Product.id.in_(list_product_id)).all()
 
         # minus the addcart quantity
         for addcart in list_addcart_product:
@@ -218,20 +229,20 @@ def mastercard_form():
 @addcart.route("/single-payment-cart", methods=["GET", "POST"])
 @need_to_authenticate
 def single_payment_cart():
-    back = request.referrer
     id = int(request.args.get("id"))
     item_id = Addcart.query.get(id)
     delivery_fee = 100
 
     if request.form.get("payment-cart"):
         if request.method == "POST":
-            choose_payment = request.form.get("radioNoLabel")
-            if choose_payment == "cod":
-                return redirect(url_for("addcart.checkout", product_id=id, list_id=item_id))
-            else:
-                return redirect(url_for("addcart.mastercard", addcart_id=id, list_id=item_id))
+            if id:
+                choose_payment = request.form.get("radioNoLabel")
+                if choose_payment == "cod":
+                    return redirect(url_for("addcart.checkout", product_id=id))
+                else:
+                    return redirect(url_for("addcart.mastercard", addcart_id=id))
 
-    return render_template("singleCart.html", product=item_id, courier=delivery_fee, back=back)
+    return render_template("singleCart.html", product=item_id, courier=delivery_fee)
 
 
 @addcart.route("/payment-cart", methods=["GET", "POST"])
@@ -239,11 +250,11 @@ def single_payment_cart():
 def payment_cart():
     back = request.referrer
 
-    if len(current_user.settings) == 0:
+    if len(current_user.settings) == 0:  # check if user has address
         return redirect(url_for("setting.user_address"))
-
     list_id = list(
         eval("".join([itemId for itemId in request.args.getlist("addcart")])))
+
     addcart_id = Addcart.query.filter(Addcart.id.in_(list_id)).all()
 
     subtotal = 0
@@ -256,11 +267,12 @@ def payment_cart():
 
     if request.form.get("payment-cart"):
         if request.method == "POST":
-            choose_payment = request.form.get("radioNoLabel")
-            if choose_payment == "cod":
-                return redirect(url_for("addcart.checkout", product_id=id, list_id=list_id))
-            else:
-                return redirect(url_for("addcart.mastercard", product_id=id, list_id=list_id))
+            if list_id:
+                choose_payment = request.form.get("radioNoLabel")
+                if choose_payment == "cod":
+                    return redirect(url_for("addcart.list_checkout", list_id=list_id))
+                else:
+                    return redirect(url_for("addcart.mastercard", list_id=list_id))
 
     return render_template(
         "buycart.html",
@@ -299,7 +311,7 @@ def add_cart():
                 flavour = request.json["flavour"]
                 get_product = Product.query.get(id)
                 new_cart = Addcart(
-                    product_id = get_product.id,
+                    product_id=get_product.id,
                     title=get_product.title,
                     price=get_product.price,
                     total_price=get_product.total_price,
@@ -323,7 +335,7 @@ def addcart_single():
 
     if request.method == "POST":
         if len(current_user.settings) == 0:
-            return {"message" : "No settings"}
+            return {"message": "No settings"}
         id = int(request.args.get("id"))
         singleProduct = Addcart.query.get(id)
         if singleProduct.quantity <= 0:
@@ -334,7 +346,7 @@ def addcart_single():
             singleProduct.buyer_quantity = int(quantityItem)
             db.session.commit()
             if singleProduct.quantity < singleProduct.buyer_quantity:
-                return {"message": "Your order quantity is greater than the item quantity", "quantity" : singleProduct.quantity}
+                return {"message": "Your order quantity is greater than the item quantity", "quantity": singleProduct.quantity}
             return {"message": "Success"}
 
 # addcart list
@@ -343,30 +355,33 @@ def addcart_single():
 @addcart.route("/list-cart", methods=["GET", "POST"])
 @need_to_authenticate
 def addcart_list():
-    list_id = list(eval("".join([itemId for itemId in request.args.getlist("addcart")])))
+    list_id = list(
+        eval("".join([itemId for itemId in request.args.getlist("addcart")])))
     addcart_id = Addcart.query.filter(Addcart.id.in_(list_id)).all()
     if request.method == "POST":
         # check if buyer has address
         if len(current_user.settings) == 0:
-            return {"message" : "No settings"}
+            return {"message": "No settings"}
         quantityItem = request.json["cartQuantity"]
         for quantity in range(len(quantityItem)):
             if addcart_id[quantity].quantity <= 0:
                 return {
                     "message": "Out of stocks",
-                    "quantity" : f"{addcart_id[quantity].title} Out of stocks"
+                    "quantity": f"{addcart_id[quantity].title} Out of stocks"
                 }
             else:
-                addcart_id[quantity].total_price = addcart_id[quantity].price * int(quantityItem[quantity])
-                addcart_id[quantity].buyer_quantity = int(quantityItem[quantity])
+                addcart_id[quantity].total_price = addcart_id[quantity].price * \
+                    int(quantityItem[quantity])
+                addcart_id[quantity].buyer_quantity = int(
+                    quantityItem[quantity])
                 db.session.commit()
-        
+
                 # check if item quantity is less than buyer quantity
                 if addcart_id[quantity].quantity < addcart_id[quantity].buyer_quantity:
                     return {
-                        "message" : "Your order quantity is greater than the item quantity",
-                        "quantity" : f"{addcart_id[quantity].title} have {addcart_id[quantity].quantity}pcs. quantity left. Lessen your order"
-                    } 
+                        "message": "Your order quantity is greater than the item quantity",
+                        "quantity": f"{addcart_id[quantity].title} have {addcart_id[quantity].quantity}pcs. quantity left. Lessen your order"
+                    }
 
         return {"message": "Success"}
 
@@ -404,21 +419,22 @@ def buy_product():
     if current_user.is_authenticated:
         # check if buyer has address
         if len(current_user.settings) == 0:
-            return {"message" : "No settings"}
+            return {"message": "No settings"}
 
         id = request.args.get("id")
         buy_product = Product.query.get(id)
-        
+
         quantityItem = request.json["quantity"]
         buy_product.buyer_quantity = int(quantityItem)
         db.session.commit()
 
         if buy_product.quantity <= 0:
-            return {"message" : "Product is out of quantity"}
+            return {"message": "Product is out of quantity"}
         elif buy_product.quantity < buy_product.buyer_quantity:
-            return {"message" : "Lessen your quantity"}
+            return {"message": "Lessen your quantity"}
         else:
-            addcart_product = Addcart.query.filter_by(product_id = int(id)).first()
+            addcart_product = Addcart.query.filter_by(
+                product_id=int(id)).first()
             if addcart_product:
                 addcart_product.quantity -= int(quantityItem)
             quantityItem = request.json["quantity"]

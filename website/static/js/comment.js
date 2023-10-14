@@ -1,60 +1,57 @@
 window.onload = () => {
-    productCommentData()
-}
-
+  productCommentData();
+};
 
 let productId = document.querySelector(".productId");
 let commentDataSection = document.querySelector("#commentDataSection");
-document.querySelector("#commentSection").addEventListener("submit", e => {
-    e.preventDefault()
+document.querySelector("#commentSection").addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    let fileComment = document.querySelector("#fileComment")
-    let headline = document.querySelector("#headline")
-    let review = document.querySelector("#review")
-    let rating = document.querySelector("#rating")
+  let fileComment = document.querySelector("#fileComment");
+  let headline = document.querySelector("#headline");
+  let review = document.querySelector("#review");
+  let rating = document.querySelector("#rating");
 
-    let newComment = new FormData()
-    newComment.append("fileComment", fileComment.files[0])
-    newComment.append("headline", headline.value)
-    newComment.append("review", review.value)
-    newComment.append("rating", rating.value)
-    newComment.append("product_id", productId.id)
-    fetch(`/comment?productId=${productId.id}`, {
-        method : "POST",
-        body : newComment
-    }).then(res => res.json())
-    .then(res => {
-        if (res["authenticated"] === false){
-            location.replace("/login")
-        }
-        commentHtml(res["results"])
-        
-        
-    }).catch(err => console.log(err))
+  let newComment = new FormData();
+  newComment.append("fileComment", fileComment.files[0]);
+  newComment.append("headline", headline.value);
+  newComment.append("review", review.value);
+  newComment.append("rating", rating.value);
+  newComment.append("product_id", productId.id);
+  fetch(`/comment?productId=${productId.id}`, {
+    method: "POST",
+    body: newComment,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res["authenticated"] === false) {
+        location.replace("/login");
+      }
+      commentHtml(res["results"]);
+    });
 
-    document.querySelector("#commentSection").reset()
-})
+  document.querySelector("#commentSection").reset();
+});
 
 const productCommentData = () => {
-    
-    fetch(`/product-comment?product=${productId.id}`)
-    .then(res => res.json())
-    .then(res => {
-            let comments = res["results"]
-            if (comments == true){
-            comments.forEach(comment => {
-                commentHtml(comment)
-            })
-            }else{
-                comments.forEach(comment => {
-                    commentHtml(comment)
-                })
-            }
-    })
-}
-let commentOutput = ""
+  fetch(`/product-comment?product=${productId.id}`)
+    .then((res) => res.json())
+    .then((res) => {
+      let comments = res["results"];
+      if (comments == true) {
+        comments.forEach((comment) => {
+          commentHtml(comment);
+        });
+      } else {
+        comments.forEach((comment) => {
+          commentHtml(comment);
+        });
+      }
+    });
+};
+let commentOutput = "";
 const commentHtml = (data) => {
-    commentOutput += `
+  commentOutput += `
         <div class="row border-bottom py-4" id="${data.id}">
                             
         <div class="col-lg-1 avatar rounded-circle bg-warning ">
@@ -68,34 +65,31 @@ const commentHtml = (data) => {
         </p>
         <h6 class=""> ${data.rating} <span>${data.heading}</span></h6>
         <p>${data.review}</p>
-        ${data.image_url ? 
-            `
+        ${
+          data.image_url
+            ? `
             <div class="img d-flex">
                 <div class="m-2">
                 <img src="/static/img/${data.image_url}" width="100" alt="${data.image_url}">
                 </div>
             </div>
             `
-        :
-
-            `
+            : `
             `
         }
 
         <div class="update pt-3 d-flex justify-content-between">
             <div class="likeBtn">
-            ${data.like.length == 0? 
-                
-                `
-                <span id="like-count${data.id}" class="like-count">${ data.like.length }</span>
+            ${
+              data.like.length == 0
+                ? `
+                <span id="like-count${data.id}" class="like-count">${data.like.length}</span>
                 <a class="like-btn text-dark like" id="${data.id}">
                     <i onclick="likeButton(${data.id})" id="likeId${data.id}" class="bi bi-hand-thumbs-up likeComment"></i>
                 </a>
                 `
-                
-            :
-                `
-                <span id="like-count${data.id}" class="like-count text-success">${ data.like.length }</span>   
+                : `
+                <span id="like-count${data.id}" class="like-count text-success">${data.like.length}</span>   
                 <a class="like-btn text-dark like" id="${data.id}">
                     <i onclick="likeButton(${data.id})" id="likeId${data.id}" class="bi bi-hand-thumbs-up-fill likeComment text-success"></i>
                 </a>
@@ -119,26 +113,25 @@ const commentHtml = (data) => {
         </div>
         
     </div>
-    `
-    commentDataSection.innerHTML = commentOutput
-}
+    `;
+  commentDataSection.innerHTML = commentOutput;
+};
 
 let likeButton = (id) => {
-
-    let likeBtnSvg = document.querySelector(`#likeId${id}`)
-    let likeCount = document.querySelector(`#like-count${id}`)
-    fetch(`/like-comment?like=${id}`, {method : "POST"})
-    .then(res => res.json())
-    .then(res => {
-        if(res["is_authenticated"] == false){
-            location.replace("/login")
-        }
-        likeCount.innerHTML = res["results"].like
-        if (res["results"].liked === true){
-            likeBtnSvg.className = "bi bi-hand-thumbs-up-fill likeComment text-success"
-        }else{
-            likeBtnSvg.className = "bi bi-hand-thumbs-up likeComment text-dark"
-            
-        }
+  let likeBtnSvg = document.querySelector(`#likeId${id}`);
+  let likeCount = document.querySelector(`#like-count${id}`);
+  fetch(`/like-comment?like=${id}`, { method: "POST" })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res["is_authenticated"] == false) {
+        location.replace("/login");
+      }
+      likeCount.innerHTML = res["results"].like;
+      if (res["results"].liked === true) {
+        likeBtnSvg.className =
+          "bi bi-hand-thumbs-up-fill likeComment text-success";
+      } else {
+        likeBtnSvg.className = "bi bi-hand-thumbs-up likeComment text-dark";
+      }
     });
-}
+};
