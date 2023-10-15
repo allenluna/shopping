@@ -35,11 +35,13 @@ class Product(db.Model):
     image_binary = db.Column(JSON)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     rating = db.Column(db.Float)
+    all_rating = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user_name = Relationship("User", back_populates="posts")
 
     comment = Relationship("Comment", back_populates="user_product_comment")
     user_rating = Relationship("Rating", back_populates="user_product_rating")
+
 
 class Comment(db.Model):
     __tablename__ = "comments"
@@ -47,7 +49,7 @@ class Comment(db.Model):
     file = db.Column(db.String)
     heading = db.Column(db.String)
     review = db.Column(db.String)
-    rating = db.Column(db.Integer)
+    rating = db.Column(db.String)
     date = db.Column(db.String)
 
     product_comment_id = db.Column(db.Integer, db.ForeignKey("products.id"))
@@ -58,23 +60,24 @@ class Comment(db.Model):
 
     like = Relationship("Like", backref="comments")
 
+
 class Rating(db.Model):
     __tablename__ = "ratings"
     id = db.Column(db.Integer, primary_key=True)
+    comment_id = db.Column(db.Integer)
     rating = db.Column(db.Float)
-
     product_rating_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     user_product_rating = Relationship("Product", back_populates="user_rating")
 
     user_rating_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user_rating = Relationship("User", back_populates="rating")
 
+
 class Like(db.Model):
     __tablename__ = "likes"
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.Integer, db.ForeignKey("users.id"))
     comment_id = db.Column(db.Integer, db.ForeignKey("comments.id"))
-
 
 
 class Addcart(db.Model):

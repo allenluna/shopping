@@ -1,7 +1,3 @@
-window.onload = () => {
-  productCommentData();
-};
-
 let productId = document.querySelector(".productId");
 let commentDataSection = document.querySelector("#commentDataSection");
 document.querySelector("#commentSection").addEventListener("submit", (e) => {
@@ -49,10 +45,15 @@ const productCommentData = () => {
       }
     });
 };
+
+productCommentData();
+
 let commentOutput = "";
 const commentHtml = (data) => {
   commentOutput += `
-        <div class="row border-bottom py-4" id="${data.id}">
+        <div class="row border-bottom py-4 commentCard${data.id}" id="${
+    data.id
+  }">
                             
         <div class="col-lg-1 avatar rounded-circle bg-warning ">
         ${data.name[0]}
@@ -97,18 +98,34 @@ const commentHtml = (data) => {
             }
             
             </div>
+            ${
+              data.user_in === data.user_id
+                ? `
             <div class="nav-item dropdown me-4">
             <a class="nav-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
                 <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
                 </svg>
             </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-            </div>
+              <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item myProdEdit updateComment" id=${data.id} href="#commentSection">
+                      <i id="${data.id}" class="bi bi-pencil-square myProdEdit updateComment" data-bs-toggle="modal" data-bs-target="#"></i>
+                        Edit
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item myProdDelete deleteComment" id=${data.id}  data-bs-toggle="modal" data-bs-target="#deleteComment">
+                      <i id="${data.id}" class="bi bi-trash3 myProdDelete deleteComment"></i>
+                        Delete
+                      </a>
+                    </li>
+                  </ul>
+                  
+              
+            </div> `
+                : ""
+            }
         </div>
         </div>
         
@@ -117,6 +134,7 @@ const commentHtml = (data) => {
   commentDataSection.innerHTML = commentOutput;
 };
 
+// LIKE FUNCTION
 let likeButton = (id) => {
   let likeBtnSvg = document.querySelector(`#likeId${id}`);
   let likeCount = document.querySelector(`#like-count${id}`);
@@ -133,5 +151,57 @@ let likeButton = (id) => {
       } else {
         likeBtnSvg.className = "bi bi-hand-thumbs-up likeComment text-dark";
       }
+    });
+};
+
+// DELETE FUNCTION
+
+let newDeleteId;
+commentDataSection.addEventListener("click", (e) => {
+  let deleteId = e.target.classList.contains("deleteComment");
+  let editId = e.target.classList.contains("updateComment");
+
+  if (editId) {
+    // editComment(e.target.id);
+  }
+  if (deleteId) {
+    newDeleteId = e.target.id;
+  }
+});
+
+document.querySelector("#deleteComment").addEventListener("click", () => {
+  fetch(`/delete-comment?comment=${newDeleteId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ product_id: productId.id }),
+  })
+    .then((res) => res.json())
+    .then(() => {
+      let commentCardDelete = document.querySelector(
+        `.commentCard${newDeleteId}`
+      );
+
+      commentDataSection.removeChild(commentCardDelete);
+    });
+});
+
+const editComment = (id) => {
+  let fileComment = document.querySelector("#fileComment");
+  let headline = document.querySelector("#headline");
+  let review = document.querySelector("#review");
+  let rating = document.querySelector("#rating");
+
+  let editComment = new FormData();
+  editComment.append("fileComment", fileComment.files[0]);
+  editComment.append("headline", headline.value);
+  editComment.append("review", review.value);
+  editComment.append("rating", rating.value);
+  fetch(`/edit-comment?edit=${id}`, {
+    method: "POST",
+    body: editComment,
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      console.log([...editComment.entries()]);
     });
 };
