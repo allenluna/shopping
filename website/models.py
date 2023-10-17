@@ -51,7 +51,7 @@ class Comment(db.Model):
     review = db.Column(db.String)
     rating = db.Column(db.String)
     date = db.Column(db.String)
-
+    comment_id = db.Column(db.Integer)
     product_comment_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     user_product_comment = Relationship("Product", back_populates="comment")
 
@@ -109,7 +109,7 @@ class Sale(db.Model):
     category = db.Column(db.String(100))
     image_url = db.Column(JSON)
     rating = db.Column(db.Integer)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.String)
 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user_name = Relationship("User", back_populates="sales")

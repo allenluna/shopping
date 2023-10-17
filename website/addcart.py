@@ -3,6 +3,7 @@ from flask_login import current_user
 from .models import Addcart, Product, Sale
 from .setting import need_to_authenticate
 from . import db
+from datetime import datetime
 
 addcart = Blueprint("addcart", __name__)
 
@@ -113,7 +114,8 @@ def proceed_checkout():
             image_url=product_id.image_url["title"][int(
                 image_pos)][int(image_filename)],
             rating=product_id.rating,
-            user_name=current_user
+            user_name=current_user,
+            date=datetime.now().strftime("%Y-%m-%d")
         )
         db.session.add(checkout_product)
         db.session.commit()
@@ -136,6 +138,7 @@ def proceed_checkout():
             category=addcart_item.category,
             image_url=addcart_item.image_url[1],
             rating=addcart_item.rating,
+            date=datetime.now().strftime("%Y-%m-%d"),
             user_name=current_user
         )
         db.session.add(single_addcart_checkout)
@@ -170,6 +173,7 @@ def proceed_checkout():
                 category=item.category,
                 image_url=item.image_url[1],
                 rating=item.rating,
+                date=datetime.now().strftime("%Y-%m-%d"),
                 user_name=current_user
             )for item in list_addcart_product]
         db.session.add_all(list_product)

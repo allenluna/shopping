@@ -30,47 +30,56 @@ def home():
 def dashboard():
     return render_template("dashboard.html")
 
+
 @view.route("/dashboard-sales-product")
 @only_admin
 def sales_products():
 
     sales = Sale.query.all()
 
-    return {"results" : [add_cart_product(sale) for sale in sales]}
+    return {"results": [add_cart_product(sale) for sale in sales]}
+
 
 @view.route("/dashboard-calculated-items", methods=["GET", "POST"])
 @only_admin
 def dashboad_calc():
-    income = db.session.query(db.func.sum(Sale.total_price), Sale.category).group_by(Sale.category).order_by(Sale.category).all()
+    income = db.session.query(db.func.sum(Sale.total_price), Sale.category).group_by(
+        Sale.category).order_by(Sale.category).all()
+
     income_data = [total_amount for total_amount, _ in income]
     income_category = [category for _, category in income]
 
     default_datetime = datetime.now().strftime("%Y-%m-%d")
-    income_date = Sale.query.filter(Sale.date.like(f"%{default_datetime}%")).all()
+    income_date = Sale.query.filter(
+        Sale.date.like(f"%{default_datetime}%")).all()
+    print(len(income_date))
     day_income = [int(income.total_price) for income in income_date]
 
-    return {"income" : income_data, 
-            "category" :  income_category, 
-            "default_datetime" : default_datetime, 
-            "day_income" : day_income
-        }
+    return {"income": income_data,
+            "category":  income_category,
+            "default_datetime": default_datetime,
+            "day_income": day_income
+            }
+
 
 @view.route("/filter-by-date", methods=["GET", "POST"])
 @need_to_authenticate
 @only_admin
 def filter_by_date():
-    income_by_date = db.session.query(db.func.sum(Sale.total_price), Sale.date).group_by(Sale.date).order_by(Sale.date).all()
-    date = [date.strftime("%Y-%m-%d") for _,date in income_by_date]
+    income_by_date = db.session.query(db.func.sum(
+        Sale.total_price), Sale.date).group_by(Sale.date).order_by(Sale.date).all()
+    date = [date.strftime("%Y-%m-%d") for _, date in income_by_date]
     if request.method == "POST":
         filter_by_date = request.json["date"]
-        income_date = Sale.query.filter(Sale.date.like(f"%{filter_by_date}%")).all()
+        income_date = Sale.query.filter(
+            Sale.date.like(f"%{filter_by_date}%")).all()
         day_income = [int(income.total_price) for income in income_date]
         if filter_by_date in date:
             date = filter_by_date
-        return {"income_by_date" : day_income, "date" : date}
+        return {"income_by_date": day_income, "date": date}
 
 
-@view.route("/products", methods=["GET", "POST"])   
+@view.route("/products", methods=["GET", "POST"])
 def product():
     posts = reversed(Product.query.all())
     return render_template("product.html", posts=posts, current_user=current_user)
@@ -88,7 +97,7 @@ def preview():
 
     except AttributeError:
         return redirect(url_for("view.home"))
-    
+
     try:
         product_rating = [rating.rating for rating in ratings]
         calculated_rating = sum(product_rating)/len(product_rating)
@@ -96,7 +105,7 @@ def preview():
     except:
         calculated_rating = 0
         rating_number = 0
-    
+
     posts.rating = calculated_rating
     db.session.commit()
 
@@ -107,9 +116,10 @@ def preview():
             db.session.commit()
             return redirect(url_for("addcart.payment_cart", id=id))
 
-    return render_template("preview.html", id=id, posts=posts, current_user=current_user, 
-                           rating=calculated_rating, rating_num=rating_number, 
+    return render_template("preview.html", id=id, posts=posts, current_user=current_user,
+                           rating=calculated_rating, rating_num=rating_number,
                            related_product=related_product, back=back)
+
 
 @view.route("/posted-product")
 def posted_products():
@@ -119,16 +129,18 @@ def posted_products():
 @view.route("/preview-carousel")
 @need_to_authenticate
 def prev_carousel():
-    return {"message" : "Success"}
+    return {"message": "Success"}
+
 
 @view.route("/search-product", methods=["GET", "POST"])
 def search():
     search_data = request.json["search"]
-    search_product = Product.query.filter(Product.title.like(f"%{search_data}%")).all()
+    search_product = Product.query.filter(
+        Product.title.like(f"%{search_data}%")).all()
 
-    return {"results" : [{
-        "id" : search.id,
-        "title" : search.title,
-        "category" : search.category,
-        "image_url" : search.image_url
-    } for search in search_product]} 
+    return {"results": [{
+        "id": search.id,
+        "title": search.title,
+        "category": search.category,
+        "image_url": search.image_url
+    } for search in search_product]}

@@ -11,7 +11,7 @@ comment = Blueprint("comment", __name__)
 def commentData(data):
     return {
         "user_id": data.user_comment.id,
-        "user_in": current_user.id,
+        "user_in": data.comment_id,
         "id": data.id,
         "name": data.user_comment.name,
         "image_url": data.file,
@@ -28,8 +28,6 @@ def commentData(data):
 def product_comment():
     id = request.args.get("product")
     product = Product.query.get(id).comment
-    if current_user.is_authenticated:
-        return {"results": [commentData(comment) for comment in product]}
     return {"results": [commentData(comment) for comment in product]}
 
 
@@ -70,6 +68,7 @@ def post_comment():
                     review=review,
                     rating=rating,
                     date=datetime.now().strftime("%d %B %Y"),
+                    comment_id=current_user.id,
                     user_product_comment=product,
                     user_comment=current_user
                 )
@@ -79,6 +78,7 @@ def post_comment():
                     review=review,
                     rating=rating,
                     date=datetime.now().strftime("%d %B %Y"),
+                    comment_id=current_user.id,
                     user_product_comment=product,
                     user_comment=current_user
                 )
