@@ -10,7 +10,7 @@ comment = Blueprint("comment", __name__)
 
 def commentData(data):
     return {
-        "user_id": data.user_comment.id,
+        "user_id": 0 if not current_user.is_authenticated else current_user.id,
         "user_in": data.comment_id,
         "id": data.id,
         "name": data.user_comment.name,
