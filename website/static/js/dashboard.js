@@ -65,7 +65,6 @@ fetch("/dashboard-calculated-items")
         .then((res) => {
           let newTime = res["date"];
           let newIncomeByDay = res["income_by_date"];
-          console.log(newIncomeByDay);
           lineChart.data.labels = newTime;
           lineChart.data.datasets[0].data = newIncomeByDay;
           lineChart.update();
