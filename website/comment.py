@@ -86,14 +86,6 @@ def post_comment():
             db.session.add(new_comment)
             db.session.commit()
 
-            try:
-                product_rating = [rating.rating for rating in ratings]
-                calculated_rating = sum(product_rating)/len(product_rating)
-                product.rating = calculated_rating
-                product.all_rating = sum(product_rating)
-            except:
-                calculated_rating = 0
-
             product_rating = Rating(
                 rating=percentage_product,
                 comment_id=new_comment.id,
@@ -137,57 +129,59 @@ def edit_comment():
     id = int(request.args.get("edit"))
     comment = Comment.query.get(id)
 
-    # file = request.files.get("fileComment")
-    # headline = request.form.get("headline")
-    # review = request.form.get("review")
-    # rating = request.form.get("rating")
-    # percentage_product = 0
-    # if rating == "⭐":
-    #     percentage_product = 20
-    # elif rating == "⭐⭐":
-    #     percentage_product = 40
-    # elif rating == "⭐⭐⭐":
-    #     percentage_product = 60
-    # elif rating == "⭐⭐⭐⭐":
-    #     percentage_product = 80
-    # elif rating == "⭐⭐⭐⭐⭐":
-    #     percentage_product = 10
-    # product_rating = Rating(
-    #     rating=percentage_product,
-    #     user_product_rating=product,
-    #     user_rating=current_user
-    # )
-    # try:
-    #     file.save(realpath(f"website/static/img/{file.filename}"))
-    #     comment.file = file.filename
-    #     comment.heading = headline
-    #     comment.review = review
-    #     comment.rating = rating
-    # except AttributeError:
-    #     pass
+    return {"message": "Data", "results": commentData(comment)}
 
-    return {"message": "Edited"}
 
+@comment.route("/submit-edit-comment", methods=["GET", "POST"])
+def edit_comment_data():
+    id = request.args.get("edit")
+    comment = Comment.query.get(int(id))
+    file = request.files.get("fileComment")
+    headline = request.form.get("headline")
+    review = request.form.get("review")
+    rating = request.form.get("rating")
+    product_id = request.form.get("product_id")
+    percentage_product = 0
+
+    if rating == "⭐":
+        percentage_product = 20
+    elif rating == "⭐⭐":
+        percentage_product = 40
+    elif rating == "⭐⭐⭐":
+        percentage_product = 60
+    elif rating == "⭐⭐⭐⭐":
+        percentage_product = 80
+    elif rating == "⭐⭐⭐⭐⭐":
+        percentage_product = 10
+
+    try:
+        file.save(realpath(f"website/static/img/{file.filename}"))
+        comment.file = file.filename
+        comment.heading = headline
+        comment.review = review
+        comment.rating = rating
+    except AttributeError:
+        comment.heading = headline
+        comment.review = review
+        comment.rating = rating
+
+    # also update rating status
+    update_rating = Rating.query.filter_by(comment_id=id).first()
+    update_rating.rating = percentage_product
+
+    db.session.commit()
+    return {"results": commentData(comment)}
 
 # delete comment
+
+
 @comment.route("/delete-comment", methods=["GET", "POST"])
 def delete_comment():
     id = int(request.args.get("comment"))
-    prodId = int(request.json["product_id"])
     comment_delete = Comment.query.get(id)
-
     like_delete = Like.query.filter_by(comment_id=id).all()
     rating_num = Rating.query.filter_by(
         comment_id=comment_delete.id).first()
-
-    # minus the old rating and set new rating
-    product_rating = Product.query.get(prodId)
-    ratings = product_rating.user_rating
-    old_rating = [rating.rating for rating in ratings]
-    calculated_rating = (sum(old_rating) -
-                         rating_num.rating)/len(old_rating)
-    product_rating.rating = calculated_rating
-    product_rating.all_rating = sum(old_rating)
 
     for like in like_delete:
         db.session.delete(like)

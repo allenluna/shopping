@@ -1,6 +1,6 @@
 let productId = document.querySelector(".productId");
 let commentDataSection = document.querySelector("#commentDataSection");
-document.querySelector("#commentSection").addEventListener("submit", (e) => {
+document.querySelector("#postCommentData").addEventListener("click", (e) => {
   e.preventDefault();
 
   let fileComment = document.querySelector("#fileComment");
@@ -47,7 +47,7 @@ const productCommentData = () => {
 };
 
 productCommentData();
-
+// console.log(data.name[0]);
 let commentOutput = "";
 const commentHtml = (data) => {
   commentOutput += `
@@ -62,20 +62,29 @@ const commentHtml = (data) => {
         <h5 class="mb-1">
             ${data.name}
         </h5>
-        <p class="small"> <span class="text-muted">${data.date}</span>
-        </p>
-        <h6 class=""> ${data.rating} <span>${data.heading}</span></h6>
-        <p>${data.review}</p>
+        <p class="small date${data.id}"> <span class="text-muted ">${
+    data.date
+  }</span>
+              </p>
+              <h6 class="rating${data.id}"> ${
+    data.rating
+  } <span class="heading${data.id}">${data.heading}</span></h6>
+    
+        <p class="review${data.id}">${data.review}</p>
         ${
           data.image_url
             ? `
             <div class="img d-flex">
-                <div class="m-2">
-                <img src="/static/img/${data.image_url}" width="100" alt="${data.image_url}">
+                <div class="m-2 image_data${data.id}">
+                <img src="/static/img/${data.image_url}" width="100">
                 </div>
             </div>
             `
             : `
+            <div class="img d-flex">
+                <div class="m-2 image_data${data.id}">
+                </div>
+            </div>
             `
         }
 
@@ -110,7 +119,7 @@ const commentHtml = (data) => {
               <ul class="dropdown-menu">
                     <li>
                       <a class="dropdown-item myProdEdit updateComment" id=${data.id} href="#commentSection">
-                      <i id="${data.id}" class="bi bi-pencil-square myProdEdit updateComment" data-bs-toggle="modal" data-bs-target="#"></i>
+                      <i id="${data.id}" class="bi bi-pencil-square myProdEdit updateComment" ></i>
                         Edit
                       </a>
                     </li>
@@ -157,12 +166,35 @@ let likeButton = (id) => {
 // DELETE FUNCTION
 
 let newDeleteId;
+let editItemId;
 commentDataSection.addEventListener("click", (e) => {
   let deleteId = e.target.classList.contains("deleteComment");
   let editId = e.target.classList.contains("updateComment");
 
   if (editId) {
-    // editComment(e.target.id);
+    document.querySelector("#postCommentData").style.display = "none";
+    document.querySelector("#editCommentData").style.display = "block";
+    let fileComment = document.querySelector("#fileComment");
+    let headline = document.querySelector("#headline");
+    let review = document.querySelector("#review");
+    let rating = document.querySelector("#rating");
+    let editComment = new FormData();
+    editComment.append("fileComment", fileComment.files[0]);
+    editComment.append("headline", headline.value);
+    editComment.append("review", review.value);
+    editComment.append("rating", rating.value);
+    fetch(`/edit-comment?edit=${e.target.id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        // this then is for fetching the the comment
+        let result = res["results"];
+        headline.value = result.heading;
+        review.value = result.review;
+        rating.value = result.rating;
+      });
+
+    // itemId
+    editItemId = e.target.id;
   }
   if (deleteId) {
     newDeleteId = e.target.id;
@@ -185,23 +217,47 @@ document.querySelector("#deleteComment").addEventListener("click", () => {
     });
 });
 
-const editComment = (id) => {
+// this then is for updating the comment
+document.querySelector("#editCommentData").addEventListener("click", (e) => {
+  e.preventDefault();
+
   let fileComment = document.querySelector("#fileComment");
   let headline = document.querySelector("#headline");
   let review = document.querySelector("#review");
   let rating = document.querySelector("#rating");
-
   let editComment = new FormData();
   editComment.append("fileComment", fileComment.files[0]);
   editComment.append("headline", headline.value);
   editComment.append("review", review.value);
   editComment.append("rating", rating.value);
-  fetch(`/edit-comment?edit=${id}`, {
+  editComment.append("product_id", productId.id);
+  e.preventDefault();
+  fetch(`/submit-edit-comment?edit=${editItemId}`, {
     method: "POST",
     body: editComment,
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log([...editComment.entries()]);
+      let editCommentData = res["results"];
+      // change html data
+      let date = document.querySelector(`.date${editItemId}`);
+      let rating = document.querySelector(`.rating${editItemId}`);
+      let review = document.querySelector(`.review${editItemId}`);
+      let image = document.querySelector(`.image_data${editItemId}`);
+      date.innerHTML = `
+      <span class="text-muted ">${editCommentData.date}</span>
+      `;
+      review.innerHTML = editCommentData.review;
+      rating.innerHTML = `
+      ${editCommentData.rating} <span class="heading${editCommentData.editItemId}">${editCommentData.heading}</span>
+      `;
+      if (editCommentData.image_url) {
+        image.innerHTML = `
+        <img src="/static/img/${editCommentData.image_url}" width="100">
+        `;
+      }
+      document.querySelector("#postCommentData").style.display = "block";
+      document.querySelector("#editCommentData").style.display = "none";
+      document.querySelector("#commentSection").reset();
     });
-};
+});

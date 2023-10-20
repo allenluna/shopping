@@ -44,13 +44,14 @@ document.querySelector("#chooseCart").addEventListener("click", (e) => {
         if (res["message"] == "No settings") {
           location.replace("/user_address");
         } else {
-          document.querySelector("#mastercard-alert").innerHTML = res["message"]
+          document.querySelector("#related-addcart-alert").innerHTML =
+            res["message"];
           $(document).ready(function () {
-              $("#mastercard-alert")
-                .fadeTo(2000, 500)
-                .slideUp(500, function () {
-                  $("#mastercard-alert").slideUp(500);
-                });
+            $("#related-addcart-alert")
+              .fadeTo(2000, 500)
+              .slideUp(500, function () {
+                $("#related-addcart-alert").slideUp(500);
+              });
           });
         }
         cartHtmlData(res["results"]);
@@ -83,28 +84,27 @@ document.querySelector(".buyProduct").addEventListener("click", (e) => {
       if (res["authenticated"] == false) {
         location.replace("/login");
       } else {
-        if(res["message"] == "No settings"){
-          location.replace("/user_address")
-        }else if(res["message"] == "Product is out of quantity"){
-          document.querySelector("#quantity-alert").innerHTML = res["message"]
+        if (res["message"] == "No settings") {
+          location.replace("/user_address");
+        } else if (res["message"] == "Product is out of quantity") {
+          document.querySelector("#quantity-alert").innerHTML = res["message"];
           $(document).ready(function () {
-              $("#quantity-alert")
-                .fadeTo(2000, 500)
-                .slideUp(500, function () {
-                  $("#quantity-alert").slideUp(500);
-                });
+            $("#quantity-alert")
+              .fadeTo(2000, 500)
+              .slideUp(500, function () {
+                $("#quantity-alert").slideUp(500);
+              });
           });
-        }else if(res["message"] == "Lessen your quantity"){
-           
-          document.querySelector("#quantity-alert").innerHTML = res["message"]
+        } else if (res["message"] == "Lessen your quantity") {
+          document.querySelector("#quantity-alert").innerHTML = res["message"];
           $(document).ready(function () {
-              $("#quantity-alert")
-                .fadeTo(2000, 500)
-                .slideUp(500, function () {
-                  $("#quantity-alert").slideUp(500);
-                });
+            $("#quantity-alert")
+              .fadeTo(2000, 500)
+              .slideUp(500, function () {
+                $("#quantity-alert").slideUp(500);
+              });
           });
-        }else if (res["message"] == "Success") {
+        } else if (res["message"] == "Success") {
           location.replace(`/check-to-buy?id=${items}`);
         }
       }
@@ -178,25 +178,30 @@ const addcartData = () => {
           })
             .then((res) => res.json())
             .then((res) => {
-              if (res["message"] == "No settings"){
-                location.replace("/user_address")
-              }else if (res["message"] == "Out of stocks") {
-                document.querySelector("#mastercard-alert").innerHTML = res["quantity"]
+              if (res["message"] == "No settings") {
+                location.replace("/user_address");
+              } else if (res["message"] == "Out of stocks") {
+                document.querySelector("#mastercard-alert").innerHTML =
+                  res["quantity"];
                 $(document).ready(function () {
-                    $("#mastercard-alert")
-                      .fadeTo(2000, 500)
-                      .slideUp(500, function () {
-                        $("#mastercard-alert").slideUp(500);
-                      });
+                  $("#mastercard-alert")
+                    .fadeTo(2000, 500)
+                    .slideUp(500, function () {
+                      $("#mastercard-alert").slideUp(500);
+                    });
                 });
-              } else if (res["message"] == "Your order quantity is greater than the item quantity") {
-                document.querySelector("#mastercard-alert").innerHTML = res["quantity"]
+              } else if (
+                res["message"] ==
+                "Your order quantity is greater than the item quantity"
+              ) {
+                document.querySelector("#mastercard-alert").innerHTML =
+                  res["quantity"];
                 $(document).ready(function () {
-                    $("#mastercard-alert")
-                      .fadeTo(2000, 500)
-                      .slideUp(500, function () {
-                        $("#mastercard-alert").slideUp(500);
-                      });
+                  $("#mastercard-alert")
+                    .fadeTo(2000, 500)
+                    .slideUp(500, function () {
+                      $("#mastercard-alert").slideUp(500);
+                    });
                 });
               } else {
                 location.replace(`/payment-cart?addcart=${listId}`);
@@ -212,23 +217,31 @@ const addcartData = () => {
             .then((res) => {
               if (res["message"] == "Success") {
                 location.replace(`/single-payment-cart?id=${singleProd}`);
-              } else if(res["message"] == "Your order quantity is greater than the item quantity") {
-                document.querySelector("#mastercard-alert").innerHTML = res["message"] + " the actual quantity are only " +res["quantity"] + "pcs."
+              } else if (
+                res["message"] ==
+                "Your order quantity is greater than the item quantity"
+              ) {
+                document.querySelector("#mastercard-alert").innerHTML =
+                  res["message"] +
+                  " the actual quantity are only " +
+                  res["quantity"] +
+                  "pcs.";
                 $(document).ready(function () {
-                    $("#mastercard-alert")
-                      .fadeTo(2000, 500)
-                      .slideUp(500, function () {
-                        $("#mastercard-alert").slideUp(500);
-                      });
+                  $("#mastercard-alert")
+                    .fadeTo(2000, 500)
+                    .slideUp(500, function () {
+                      $("#mastercard-alert").slideUp(500);
+                    });
                 });
-              }else{
-                document.querySelector("#mastercard-alert").innerHTML = res["message"]
+              } else {
+                document.querySelector("#mastercard-alert").innerHTML =
+                  res["message"];
                 $(document).ready(function () {
-                    $("#mastercard-alert")
-                      .fadeTo(2000, 500)
-                      .slideUp(500, function () {
-                        $("#mastercard-alert").slideUp(500);
-                      });
+                  $("#mastercard-alert")
+                    .fadeTo(2000, 500)
+                    .slideUp(500, function () {
+                      $("#mastercard-alert").slideUp(500);
+                    });
                 });
               }
             });
@@ -304,13 +317,13 @@ addcartItem.addEventListener("click", (e) => {
     fetch(`/delete-cart?delete=${deleteItemId}`)
       .then((res) => res.json())
       .then((res) => {
-        document.querySelector("#mastercard-alert").innerHTML = res["message"]
+        document.querySelector("#mastercard-alert").innerHTML = res["message"];
         $(document).ready(function () {
-            $("#mastercard-alert")
-              .fadeTo(2000, 500)
-              .slideUp(500, function () {
-                $("#mastercard-alert").slideUp(500);
-              });
+          $("#mastercard-alert")
+            .fadeTo(2000, 500)
+            .slideUp(500, function () {
+              $("#mastercard-alert").slideUp(500);
+            });
         });
         let deleteElement =
           e.target.parentElement.parentElement.parentElement.parentElement;

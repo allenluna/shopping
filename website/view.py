@@ -101,7 +101,7 @@ def preview():
     try:
         product_rating = [rating.rating for rating in ratings]
         calculated_rating = sum(product_rating)/len(product_rating)
-        rating_number = (calculated_rating * 5) / 100
+        rating_number = round((calculated_rating * 5) / 100, 1)
     except:
         calculated_rating = 0
         rating_number = 0
