@@ -1,4 +1,8 @@
+.gitignore
 .vscode
 __pycache__
 .flaskenv
 .env
+Pipfile
+Pipfile.lock
+requirements.txt
